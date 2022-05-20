@@ -14,10 +14,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
       "@/models/*": ["models/*"],
-      "@/store/*": ["store/*"],
+      "@/stores/*": ["stores/*"],
       "@/services/*": ["services/*"],
       "@/utils/*": ["utils/*"]
     }
