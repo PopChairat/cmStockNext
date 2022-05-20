@@ -102,11 +102,16 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  type HeaderProp = {
+    open: boolean;
+    onDrawerOpen: () => void;
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Header />
-      <Menu />
+      <Header open={open} onDrawerOpen={() => setOpen(true)} />
+      <Menu open={open} onDrawerClose={() => setOpen(false)} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Layout />
