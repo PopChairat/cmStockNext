@@ -12,7 +12,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  username: "",
+  username: "aaa",
   accessToken: "",
   isAuthenticated: false,
   isAuthenticating: true,
@@ -22,9 +22,18 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {},
-  extraReducers: (builder) => {},
+  reducers: {
+    resetUsername: (state, action) => {
+      state.username = action.payload.newUsername;
+    },
+  },
+  extraReducers: (builder) => {
+    //async
+  },
 });
+
+//ให้คนอื่นเรียกใช้ ตัว func ภายในได้
+export const { resetUsername } = userSlice.actions;
 
 // export common user selector
 //shortcut   ==> const userSelector = useSelector((store: any) => store.user);
