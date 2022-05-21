@@ -23,6 +23,21 @@ interface ReserUsernameProp {
   data: string;
 }
 
+interface SignInAction {
+  username: string;
+  password: string;
+}
+
+export const signUp = createAsyncThunk(
+  "user/signup",
+  async (credential: SignInAction) => {
+    const p1 = new Promise((res) =>
+      setTimeout(() => res({ result: "success" }), 3000)
+    );
+    return await p1;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -33,6 +48,9 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     //async
+    builder.addCase(signUp.fulfilled, (state, action: any) => {
+      state.username = action.payload.result;
+    });
   },
 });
 
