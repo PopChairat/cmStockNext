@@ -18,7 +18,7 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/models/*": ["models/*"],
-      "@/stores/*": ["stores/*"],
+      "@/store/*": ["store/*"],
       "@/services/*": ["services/*"],
       "@/utils/*": ["utils/*"]
     }
