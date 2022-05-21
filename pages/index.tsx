@@ -13,7 +13,7 @@ export default function Index({}: Props) {
   return (
     <Layout>
       <div>index {user.username}</div>
-      <button onClick={() => dispatch(resetUsername({ newUsername: "Hello" }))}>
+      <button onClick={() => dispatch(resetUsername({ data: "Hello" }))}>
         RESET
       </button>
     </Layout>

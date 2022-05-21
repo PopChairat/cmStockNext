@@ -19,12 +19,16 @@ const initialState: UserState = {
   user: undefined,
 };
 
+interface ReserUsernameProp {
+  data: string;
+}
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    resetUsername: (state, action) => {
-      state.username = action.payload.newUsername;
+    resetUsername: (state, action: PayloadAction<ReserUsernameProp>) => {
+      state.username = action.payload.data;
     },
   },
   extraReducers: (builder) => {
