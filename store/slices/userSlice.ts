@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserData } from "@/models/user.model";
+import { RootState } from "@/store/store";
 
 interface UserState {
   username: string;
@@ -24,6 +25,12 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {},
 });
+
+// export common user selector
+//shortcut   ==> const userSelector = useSelector((store: any) => store.user);
+export const userSelector = (store: RootState) => store.user;
+export const isAuthenticatedSelector = (store: RootState): boolean =>
+  store.user.isAuthenticated;
 
 // // export reducer
 export default userSlice.reducer;
