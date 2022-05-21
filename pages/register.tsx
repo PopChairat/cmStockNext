@@ -12,10 +12,13 @@ import { TextField } from "formik-material-ui";
 import { Formik, Form, Field, FormikProps } from "formik";
 import Router, { useRouter } from "next/router";
 import { Box } from "@mui/material";
+import { useAppDispatch } from "@/store/store";
+import { signUp } from "@/store/slices/userSlice";
 
 type Props = {};
 
-export default function register({}: Props) {
+export default function Register({}: Props) {
+  const dispatch = useAppDispatch();
   const showForm = ({
     values,
     setFieldValue,
@@ -85,6 +88,14 @@ export default function register({}: Props) {
               initialValues={{ username: "", password: "" }}
               onSubmit={async (values) => {
                 alert(JSON.stringify(values));
+                const res = await dispatch(signUp(values));
+                console.log(JSON.stringify(res));
+                JSON.stringify(res);
+                if (res.meta.requestStatus === "rejected") {
+                  alert("Register failed");
+                } else {
+                  Router.push("/login");
+                }
               }}
             >
               {(props) => showForm(props)}
