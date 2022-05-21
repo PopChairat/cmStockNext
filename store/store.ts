@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 
 import userReducer from "./slices/userSlice";
 
-//group reducer
-const reducers = {
+const reducer = {
   user: userReducer,
 };
 
 export const store = configureStore({
-  reducer: reducers,
+  reducer,
   devTools: process.env.NODE_ENV === "development",
 });
 

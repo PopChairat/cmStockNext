@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserData } from "@/models/user.model";
 import { RootState } from "@/store/store";
 import * as serverService from "@/services/serverService";
-import { AxiosRequestConfig } from "axios";
 import httpClient from "@/utils/httpClient";
+import { AxiosRequestConfig } from "axios";
 
 interface UserState {
   username: string;
@@ -14,17 +14,17 @@ interface UserState {
   user?: UserData;
 }
 
+interface SingleProp {
+  data: string;
+}
+
 const initialState: UserState = {
-  username: "aaa",
+  username: "",
   accessToken: "",
   isAuthenticated: false,
   isAuthenticating: true,
   user: undefined,
 };
-
-interface ReserUsernameProp {
-  data: string;
-}
 
 interface SignAction {
   username: string;
@@ -63,19 +63,27 @@ const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    resetUsername: (state, action: PayloadAction<ReserUsernameProp>) => {
+    resetUsername: (state, action: PayloadAction<SingleProp>) => {
       state.username = action.payload.data;
     },
   },
   extraReducers: (builder) => {
-    //async
-    builder.addCase(signUp.fulfilled, (state, action: any) => {
+    builder.addCase(signUp.fulfilled, (state, action) => {
       state.accessToken = "";
       state.user = undefined;
       state.isAuthenticated = false;
     });
-    builder.addCase(signIn.fulfilled, (state, action: any) => {
-      state.username = action.payload.result;
+    builder.addCase(signIn.fulfilled, (state, action) => {
+      state.accessToken = action.payload.token;
+      state.isAuthenticated = true;
+      state.isAuthenticating = false;
+      state.user = action.payload.user;
+    });
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.accessToken = "";
+      state.isAuthenticated = false;
+      state.isAuthenticating = false;
+      state.user = undefined;
     });
   },
 });
