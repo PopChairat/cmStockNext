@@ -7,12 +7,17 @@ import { sign } from "crypto";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { getProducts } from "@/store/slices/productSlice";
 
 type Props = {};
 
 const Stock = ({}: Props) => {
   const user = useSelector(userSelector);
   const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
