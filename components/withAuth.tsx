@@ -32,6 +32,12 @@ const withAuth = (WrappedComponent: React.FC) => (props: any) => {
         router.push(`/stock`);
         return null;
       }
+    } else {
+      //ถ้า authen แล้วพยายามเข้าหน้า login จะไม่ให้เข้าให้ไปหน้า index เลย
+      if (isAuthenticated) {
+        router.push(`/stock`);
+        return null;
+      }
     }
 
     // If user is logged in, return original component
