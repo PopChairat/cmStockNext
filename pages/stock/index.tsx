@@ -102,7 +102,7 @@ const Stock = ({}: Props) => {
 
   const handleDeleteConfirm = () => {
     if (selectedProduct) {
-      dispatch(deleteProduct(String(selectedProduct.id)));
+      dispatch(deleteProduct(String(selectedProduct!.id)));
       setOpenDialog(false);
     }
   };
