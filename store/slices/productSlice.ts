@@ -18,6 +18,16 @@ export const getProducts = createAsyncThunk(
     return await serverService.getProducts(keyword);
   }
 );
+
+//ไม่ได้ ใส่  builder.addCase ของ delete โปรดัก เพราะ แค่ต้องการ delete ไม่ได้มีการ เอาค่าที่ได้จาก service มาใช้ทำอะไรต่อ
+export const deleteProduct = createAsyncThunk(
+  "product/delete",
+  async (id: string) => {
+    await serverService.deleteProduct(id);
+    //เรียก store dispatch โดยตรง เพื่อเช็คว่า delete จริงไหม และ refresh state product
+    store.dispatch(getProducts());
+  }
+);
 const productSlice = createSlice({
   name: "product",
   initialState: initialState,

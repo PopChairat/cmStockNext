@@ -1,14 +1,13 @@
 import Layout from "@/components/Layouts/Layout";
 import withAuth from "@/components/withAuth";
 import React from "react";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useAppDispatch } from "@/store/store";
-import { getProducts, productSelector } from "@/store/slices/productSlice";
+import {
+  deleteProduct,
+  getProducts,
+  productSelector,
+} from "@/store/slices/productSlice";
 import { useSelector } from "react-redux";
 import { productImageURL } from "@/utils/commonUtil";
 import Image from "next/image";
@@ -102,10 +101,10 @@ const Stock = ({}: Props) => {
   };
 
   const handleDeleteConfirm = () => {
-    // if (selectedProduct) {
-    //   dispatch(deleteProduct(String(selectedProduct.id)));
-    //   setOpenDialog(false);
-    // }
+    if (selectedProduct) {
+      dispatch(deleteProduct(String(selectedProduct.id)));
+      setOpenDialog(false);
+    }
   };
 
   const columns: GridColDef[] = [
