@@ -1,4 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
+import withAuth from "@/components/withAuth";
 import { resetUsername, userSelector, signUp } from "@/store/slices/userSlice";
 import { store, useAppDispatch } from "@/store/store";
 import { Button } from "@mui/material";
@@ -8,7 +9,7 @@ import { useSelector } from "react-redux";
 
 type Props = {};
 
-export default function Stock({}: Props) {
+const Stock = ({}: Props) => {
   const user = useSelector(userSelector);
   const dispatch = useAppDispatch();
   return (
@@ -24,4 +25,6 @@ export default function Stock({}: Props) {
       </button>
     </Layout>
   );
-}
+};
+
+export default withAuth(Stock);

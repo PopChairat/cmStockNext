@@ -65,6 +65,21 @@ export const signOut = createAsyncThunk("user/signout", async () => {
   Router.push("/login");
 });
 
+export const getSession = createAsyncThunk("user/fetchSession", async () => {
+  const response = await serverService.getSession();
+
+  // set access token
+  if (response) {
+    httpClient.interceptors.request.use((config?: AxiosRequestConfig) => {
+      if (config && config.headers && response.user) {
+        config.headers["Authorization"] = `Bearer ${response.user?.token}`;
+      }
+      return config;
+    });
+  }
+  return response;
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -74,6 +89,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    //async
     builder.addCase(signUp.fulfilled, (state, action) => {
       state.accessToken = "";
       state.user = undefined;
@@ -97,6 +113,14 @@ const userSlice = createSlice({
       state.isAuthenticating = true;
       state.user = undefined;
     });
+    builder.addCase(getSession.fulfilled, (state, action) => {
+      state.isAuthenticating = false;
+      if (action.payload && action.payload.user && action.payload.user.token) {
+        state.accessToken = action.payload.user.token;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+      }
+    });
   },
 });
 
@@ -108,6 +132,8 @@ export const { resetUsername } = userSlice.actions;
 export const userSelector = (store: RootState) => store.user;
 export const isAuthenticatedSelector = (store: RootState): boolean =>
   store.user.isAuthenticated;
+export const isAuthenticatingSelector = (store: RootState): boolean =>
+  store.user.isAuthenticating;
 
 // // export reducer
 export default userSlice.reducer;

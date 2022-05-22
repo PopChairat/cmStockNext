@@ -14,12 +14,14 @@ import Router, { useRouter } from "next/router";
 import { Box } from "@mui/material";
 import { useAppDispatch } from "@/store/store";
 import { signIn } from "@/store/slices/userSlice";
+import withAuth from "@/components/withAuth";
 
 type Props = {};
 
-export default function login({}: Props) {
+const Login = ({}: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
   const showForm = ({
     values,
     setFieldValue,
@@ -92,7 +94,6 @@ export default function login({}: Props) {
                 if (response.meta.requestStatus === "rejected") {
                   alert("Login failed");
                 } else {
-                  alert("Login successful");
                   router.push("/stock");
                 }
               }}
@@ -117,4 +118,6 @@ export default function login({}: Props) {
       </Box>
     </React.Fragment>
   );
-}
+};
+
+export default withAuth(Login);
