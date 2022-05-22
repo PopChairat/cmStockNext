@@ -1,7 +1,7 @@
 import Layout from "@/components/Layouts/Layout";
 import withAuth from "@/components/withAuth";
 import { store, useAppDispatch } from "@/store/store";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { sign } from "crypto";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +16,8 @@ import Image from "next/image";
 import { productImageURL } from "@/utils/commonUtil";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import NumberFormat from "react-number-format";
+import Moment from "react-moment";
 
 type Props = {};
 
@@ -52,9 +54,47 @@ const Stock = ({}: Props) => {
       width: 150,
     },
     {
-      field: "stock",
       headerName: "Stock",
+      field: "stock",
       width: 150,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <NumberFormat
+            value={value}
+            displayType={"text"}
+            thousandSeparator={true}
+            decimalScale={0}
+            fixedDecimalScale={true}
+          />
+        </Typography>
+      ),
+    },
+    {
+      headerName: "PRICE",
+      field: "price",
+      width: 120,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <NumberFormat
+            value={value}
+            displayType={"text"}
+            thousandSeparator={true}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            suffix={"฿"}
+          />
+        </Typography>
+      ),
+    },
+    {
+      headerName: "TIME",
+      field: "createdAt",
+      width: 220,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <Moment format="DD/MM/YYYY HH:mm">{value}</Moment>
+        </Typography>
+      ),
     },
   ];
 
