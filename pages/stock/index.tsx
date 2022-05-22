@@ -35,6 +35,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { ProductData } from "@/models/product.model";
 import { TransitionProps } from "@mui/material/transitions";
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 type Props = {};
 
 const Stock = ({}: Props) => {
@@ -164,6 +173,7 @@ const Stock = ({}: Props) => {
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
+        TransitionComponent={Transition}
       >
         <DialogTitle>{"Use Google's location service?"}</DialogTitle>
         <DialogContent>
