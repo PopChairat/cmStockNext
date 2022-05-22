@@ -15,7 +15,6 @@ import Image from "next/image";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -47,8 +46,8 @@ const Transition = React.forwardRef(function Transition(
 type Props = {};
 
 const Stock = ({}: Props) => {
-  const productList = useSelector(productSelector);
   const dispatch = useAppDispatch();
+  const productList = useSelector(productSelector);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductData | null>(null);
@@ -59,6 +58,54 @@ const Stock = ({}: Props) => {
 
   const handleClose = () => {
     setOpenDialog(false);
+  };
+
+  const showDialog = () => {
+    if (selectedProduct === null) {
+      return;
+    }
+
+    return (
+      <Dialog
+        open={openDialog}
+        keepMounted
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          <Image
+            width={100}
+            height={100}
+            objectFit="cover"
+            alt="product image"
+            src={productImageURL(selectedProduct.image)}
+            style={{ width: 100, borderRadius: "5%" }}
+          />
+          <br />
+          Confirm to delete the product? : {selectedProduct.name}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            You cannot restore deleted product.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="info">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  const handleDeleteConfirm = () => {
+    // if (selectedProduct) {
+    //   dispatch(deleteProduct(String(selectedProduct.id)));
+    //   setOpenDialog(false);
+    // }
   };
 
   const columns: GridColDef[] = [
@@ -83,11 +130,11 @@ const Stock = ({}: Props) => {
     {
       field: "name",
       headerName: "Name",
-      width: 150,
+      width: 350,
     },
     {
-      headerName: "Stock",
       field: "stock",
+      headerName: "Stock",
       width: 150,
       renderCell: ({ value }: GridRenderCellParams<string>) => (
         <Typography variant="body1">
@@ -113,7 +160,7 @@ const Stock = ({}: Props) => {
             thousandSeparator={true}
             decimalScale={2}
             fixedDecimalScale={true}
-            suffix={"฿"}
+            prefix={"฿"}
           />
         </Typography>
       ),
@@ -158,8 +205,7 @@ const Stock = ({}: Props) => {
 
   return (
     <Layout>
-      <Box>Stock</Box>
-
+      <div>Stock</div>
       <DataGrid
         sx={{ backgroundColor: "white", height: "70vh" }}
         rows={productList ?? []}
@@ -167,26 +213,7 @@ const Stock = ({}: Props) => {
         pageSize={15}
         rowsPerPageOptions={[15]}
       />
-
-      <Dialog
-        open={openDialog}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        TransitionComponent={Transition}
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
-        </DialogActions>
-      </Dialog>
+      {showDialog()}
     </Layout>
   );
 };
