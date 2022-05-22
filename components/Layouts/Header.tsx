@@ -5,29 +5,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Badge, Box, Menu, MenuItem } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useAppDispatch } from "@/store/store";
+import { signOut } from "@/store/slices/userSlice";
 
 const drawerWidth = 240;
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -57,6 +42,11 @@ type HeaderProp = {
 };
 
 export default function Header({ open, onDrawerOpen }: HeaderProp) {
+  const [showProfileMenu, setShowProfileMenu] = React.useState(false);
+  const dispatch = useAppDispatch();
+  const handleClose = () => {
+    setShowProfileMenu(false);
+  };
   //callback onDrawerOpen event
   return (
     <AppBar position="fixed" open={open}>
@@ -74,8 +64,68 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          Next Stock 2022
+          CMStock Workshop with ReactJS - Typescript (TS) V.
+          {process.env.NEXT_PUBLIC_APP_VERSION}
         </Typography>
+
+        {/*"ทีบให้ item ไปขวาสุด"*/}
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Typography variant="h6" noWrap component="div" fontWeight="300">
+          Updated 2022
+        </Typography>
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <IconButton
+            size="large"
+            aria-label="show 4 new mails"
+            color="inherit"
+          >
+            <Badge badgeContent={4} color="error">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+          >
+            <Badge badgeContent={17} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-haspopup="true"
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+
+          <Menu
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={showProfileMenu}
+            onClose={handleClose}
+          >
+            <MenuItem
+              onClick={() => {
+                dispatch(signOut());
+              }}
+            >
+              Logout
+            </MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );
