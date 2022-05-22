@@ -29,5 +29,9 @@ const productSlice = createSlice({
   },
 });
 
+// export selector
+export const productSelector = (store: RootState): ProductData[] | undefined =>
+  store.product.products;
+
 // export reducer
 export default productSlice.reducer;
