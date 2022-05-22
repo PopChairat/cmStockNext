@@ -127,14 +127,13 @@ const Stock = ({}: Props) => {
   return (
     <Layout>
       <Box>Stock</Box>
-      <div style={{ height: 400, width: "100%" }}>
+      <div>
         <DataGrid
+          sx={{ backgroundColor: "white", height: "70vh" }}
           rows={productList ?? []}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-          disableSelectionOnClick
+          pageSize={15}
+          rowsPerPageOptions={[15]}
         />
       </div>
     </Layout>
