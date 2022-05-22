@@ -19,7 +19,7 @@ type Props = {};
 
 export default function login({}: Props) {
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
   const showForm = ({
     values,
     setFieldValue,
@@ -59,7 +59,7 @@ export default function login({}: Props) {
           fullWidth
           size="small"
           color="primary"
-          onClick={() => Router.push("/register")}
+          onClick={() => router.push("/register")}
         >
           Register
         </Button>
@@ -93,7 +93,7 @@ export default function login({}: Props) {
                   alert("Login failed");
                 } else {
                   alert("Login successful");
-                  Router.push("/stock");
+                  router.push("/stock");
                 }
               }}
             >
