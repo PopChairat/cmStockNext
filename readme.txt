@@ -11,3 +11,13 @@ yarn add @mui/icons-material
 yarn add formik formik-material-ui chart.js react-chartjs-2 react-moment moment react-number-format
 yarn add @reduxjs/toolkit react-redux axios cookie @react-hook/debounce @mui/x-data-grid react-iframe
 yarn add @types/cookie --dev
+
+#extra libs 2
+yarn add react-medium-image-zoom
+
+
+# redux dev tool
+https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=th
+
+# next api
+https://nextjs.org/learn/basics/api-routes/creating-api-routes
