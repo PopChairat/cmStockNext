@@ -5,8 +5,16 @@ import { Box, Button } from "@mui/material";
 import { sign } from "crypto";
 import React from "react";
 import { useSelector } from "react-redux";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import { getProducts, productSelector } from "@/store/slices/productSlice";
+
+import Image from "next/image";
+import { productImageURL } from "@/utils/commonUtil";
 
 type Props = {};
 
@@ -20,7 +28,21 @@ const Stock = ({}: Props) => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
-
+    {
+      headerName: "IMG",
+      field: "image",
+      width: 80,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Image
+          height={500}
+          width={500}
+          objectFit="cover"
+          alt="product image"
+          src={productImageURL(value)}
+          style={{ width: 70, height: 70, borderRadius: "5%" }}
+        />
+      ),
+    },
     {
       field: "name",
       headerName: "Name",
