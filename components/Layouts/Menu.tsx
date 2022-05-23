@@ -11,11 +11,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import Image from "next/image";
+import { blue } from "@mui/material/colors";
 import { ListItem, Stack } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 import { Layers, BarChart, Person } from "@mui/icons-material";
-import router from "next/router";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
@@ -73,11 +74,16 @@ type MenuProp = {
 
 export default function Menu({ open, onDrawerClose }: MenuProp) {
   const theme = useTheme();
+  const router = useRouter();
 
   return (
     <Drawer variant="permanent" open={open}>
       <DrawerHeader>
-        <Stack direction="row" alignItems="center">
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{ backgroundColor: blue }}
+        >
           <Image
             src="/static/img/cm_logo.png"
             width={200}
@@ -94,6 +100,8 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           </IconButton>
         </Stack>
       </DrawerHeader>
+      <Divider />
+
       <Divider />
       <List>
         {/* Stock */}
@@ -135,28 +143,15 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           </ListItem>
         </Link>
       </List>
+
       <Divider />
       <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
