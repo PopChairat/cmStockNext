@@ -1,7 +1,12 @@
 import Layout from "@/components/Layouts/Layout";
 import withAuth from "@/components/withAuth";
 import React from "react";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import { useAppDispatch } from "@/store/store";
 import {
   deleteProduct,
@@ -14,15 +19,18 @@ import Image from "next/image";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Fab,
   IconButton,
   Slide,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import NumberFormat from "react-number-format";
@@ -32,6 +40,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ProductData } from "@/models/product.model";
 import { TransitionProps } from "@mui/material/transitions";
+import Link from "next/link";
+import { Add, Clear, Search } from "@mui/icons-material";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -51,9 +61,17 @@ const Stock = ({}: Props) => {
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductData | null>(null);
 
+  const [keywordSearch, setKeywordSearch] = React.useState("");
+
+  //ตอนหน้าเปิดขึ้นมาครั้งแรกไปเรียก  dispatch(getProducts());
   React.useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
+
+  //ทันทีที่ค่า keywordSearch เกิดการเปลี่ยนแปลงจะเข้าไปเรียก  dispatch(getProducts(keywordSearch));
+  React.useEffect(() => {
+    dispatch(getProducts(keywordSearch));
+  }, [dispatch, keywordSearch]);
 
   const handleClose = () => {
     setOpenDialog(false);
@@ -102,7 +120,7 @@ const Stock = ({}: Props) => {
 
   const handleDeleteConfirm = () => {
     if (selectedProduct) {
-      dispatch(deleteProduct(String(selectedProduct!.id)));
+      dispatch(deleteProduct(String(selectedProduct.id)));
       setOpenDialog(false);
     }
   };
@@ -202,10 +220,87 @@ const Stock = ({}: Props) => {
     },
   ];
 
+  interface QuickSearchToolbarProps {
+    clearSearch: () => void;
+    onChange: () => void;
+    value: string;
+  }
+
+  function QuickSearchToolbar(props: QuickSearchToolbarProps) {
+    return (
+      <Box
+        sx={{
+          p: 0.5,
+          pb: 0,
+        }}
+      >
+        <TextField
+          variant="standard"
+          value={props.value}
+          onChange={props.onChange}
+          placeholder="Search…"
+          InputProps={{
+            startAdornment: <Search fontSize="small" />,
+            endAdornment: (
+              <IconButton
+                title="Clear"
+                aria-label="Clear"
+                size="small"
+                style={{ visibility: props.value ? "visible" : "hidden" }}
+                onClick={props.clearSearch}
+              >
+                <Clear fontSize="small" />
+              </IconButton>
+            ),
+          }}
+          sx={{
+            width: {
+              xs: 1,
+              sm: "auto",
+            },
+            m: (theme) => theme.spacing(1, 0.5, 1.5),
+            "& .MuiSvgIcon-root": {
+              mr: 0.5,
+            },
+            "& .MuiInput-underline:before": {
+              borderBottom: 1,
+              borderColor: "divider",
+            },
+          }}
+        />
+
+        <Link href="/stock/add" passHref>
+          <Fab
+            color="primary"
+            aria-label="add"
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+            }}
+          >
+            <Add />
+          </Fab>
+        </Link>
+      </Box>
+    );
+  }
+
   return (
     <Layout>
-      <div>Stock</div>
       <DataGrid
+        components={{ Toolbar: QuickSearchToolbar }}
+        componentsProps={{
+          toolbar: {
+            value: keywordSearch,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+              setKeywordSearch(e.target.value);
+            },
+            clearSearch: () => {
+              setKeywordSearch("");
+            },
+          },
+        }}
         sx={{ backgroundColor: "white", height: "70vh" }}
         rows={productList ?? []}
         columns={columns}
